@@ -2,6 +2,8 @@
 import SearchHeader from "~/components/search/SearchHeader.vue";
 import DiskInfoList from "~/components/diskInfoList.vue";
 import sourcesApiEndpoints from "~/assets/vod/clouddrive.json";
+import request from '~/utils/request'
+import axios from 'axios'
 
 definePageMeta({
   layout: 'custom',
@@ -13,13 +15,19 @@ const sources = ref([])
 const skeletonLoading = ref(true)
 
 const handleSearch = async () => {
-  sourcesApiEndpoints.forEach((item) => {
-    $fetch(item.api, {
-      method: "POST",
-      body: {
-        "name": keyword.value
-      }
-    }).then(res => {
+  request('/api?url=http://m.ssr021.cn/v/api/sortWeb', {
+    method: 'post',
+    body: {
+      "name": keyword.value,
+      token: "i69",
+      tabN: "movie_test",
+      topNo: 10,
+      whr: `question like "%${keyword.value}%"`,
+      orderBy: "isTop DESC, date_time",
+      orderType: "DESC",
+      keys: "question,answer,isTop,id"
+    }
+  }).then(res => {
       if (res.list && res.list.length) {
         sources.value = sources.value.concat(res.list)
       } else {
@@ -28,7 +36,22 @@ const handleSearch = async () => {
     }).catch(err => {
       console.log(err)
     })
-  })
+  // sourcesApiEndpoints.forEach((item) => {
+  //   $fetch(item.api, {
+  //     method: "POST",
+  //     body: {
+  //       "name": keyword.value
+  //     }
+  //   }).then(res => {
+  //     if (res.list && res.list.length) {
+  //       sources.value = sources.value.concat(res.list)
+  //     } else {
+  //       skeletonLoading.value = false
+  //     }
+  //   }).catch(err => {
+  //     console.log(err)
+  //   })
+  // })
 }
 import {badWords} from "~/utils/sensitiveWords";
 
@@ -51,11 +74,9 @@ const vodData = ref([])
 const searchByVod = async () => {
 
   vodApiEndpoints.forEach(vodApi => {
-    $fetch('/api/vod/search', {
-      method: 'get',
+    request("/api?url=" + vodApi.api, {
       query: {
         type: vodApi.type,
-        api: vodApi.api,
         ac: 'detail',
         wd: keyword.value
       }
@@ -70,6 +91,25 @@ const searchByVod = async () => {
     }).catch(err => {
       console.log(err)
     })
+    // $fetch('/api/vod/search', {
+    //   method: 'get',
+    //   query: {
+    //     type: vodApi.type,
+    //     api: vodApi.api,
+    //     ac: 'detail',
+    //     wd: keyword.value
+    //   }
+    // }).then(res => {
+    //   if (res.code === 500) return;
+    //   // if (res.pagecount > 1) return;
+    //   if (!res.list || !res.list.length) return;
+    //   res.list.forEach(item => {
+    //     vodData.value.push(Object.assign({playUrl: vodApi.playUrl}, item))
+    //   })
+    //   // console.log(vodData.value)
+    // }).catch(err => {
+    //   console.log(err)
+    // })
 
   })
 }
