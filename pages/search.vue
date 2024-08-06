@@ -4,6 +4,7 @@ import DiskInfoList from "~/components/diskInfoList.vue";
 import sourcesApiEndpoints from "~/assets/vod/clouddrive.json";
 import request from '~/utils/request'
 import axios from 'axios'
+import { formatDriveLink } from '~/utils/format'
 
 definePageMeta({
   layout: 'custom',
@@ -29,7 +30,8 @@ const handleSearch = async () => {
     }
   }).then(res => {
       if (res.list && res.list.length) {
-        sources.value = sources.value.concat(res.list)
+        const { list } = formatDriveLink(res.list)
+        sources.value = sources.value.concat(list)
       } else {
         skeletonLoading.value = false
       }
