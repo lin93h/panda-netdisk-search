@@ -103,13 +103,7 @@ export default defineNuxtConfig({
 
     ],
     nitro: {
-        devProxy: {
-           '/api': {
-            target: 'http://127.0.0.1:8787/',
-            changeOrigin: true,
-            prependPath: true
-           }
-        }
+        devProxy: {}
     },
     runtimeConfig: {
         openaiApiKey: '',
