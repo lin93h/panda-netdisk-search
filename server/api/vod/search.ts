@@ -11,21 +11,7 @@ export default defineEventHandler(async (event) => {
         if (query.type === 'xml') {
             const parser = new XMLParser();
             let jObj = parser.parse(res);
-            if(jObj){
-                let vodData = jObj.rss.list.video
-                return {
-                    code: 1,
-                    list:vodData.map((item: any) => {
-                        return {
-                            vod_name:item.name,
-                            vod_pic:item.pic,
-                            vod_id:item.id,
-                            vod_play_url: item.dl.dd
-                        }
-                    })
-                }
-            }
-            return []
+            return jObj
         }
         if(typeof res === 'string'){
             return JSON.parse(res)

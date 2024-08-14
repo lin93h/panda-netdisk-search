@@ -1,6 +1,10 @@
 <script setup>
+<<<<<<< HEAD
 import { useDoubanStore } from "~/stores/douban";
 import { badWords } from "~/utils/sensitiveWords";
+=======
+import {useDoubanStore} from "~/stores/douban";
+>>>>>>> parent of 753d655 (feat: add sensitive stop words  & update the vod sources)
 
 definePageMeta({
   layout: 'custom',
